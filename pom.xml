@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.Virtus</groupId>
+    <artifactId>Learner</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.javaml</groupId>
+            <artifactId>javaml</artifactId>
+            <version>0.1.7</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/javaml-0.1.7.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>be.abeel.util</groupId>
+            <artifactId>ajt</artifactId>
+            <version>0.2.9</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/ajt-2.9.jar</systemPath>
+        </dependency>
+    </dependencies>
+</project>
