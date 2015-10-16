@@ -1,3 +1,6 @@
+import Learner.Learner;
+import Learner.StopCondition;
+import Oracle.Passive;
 import net.sf.javaml.classification.Classifier;
 import net.sf.javaml.classification.KNearestNeighbors;
 import net.sf.javaml.classification.evaluation.EvaluateDataset;
@@ -20,11 +23,14 @@ public class Main {
     public static void main(String[] args) {
 		try {
 			Sampling s = Sampling.SubSampling;
-			Dataset data = ARFFHandler.loadARFF(new File("data/diabetes.arff"), 8);
+			Dataset data = ARFFHandler.loadARFF(new File("data/Iris.arff"), 4);
 
 			NormalizeMidrange nmr = new NormalizeMidrange(0, 2);
 			nmr.build(data);
 			nmr.filter(data);
+
+			Classifier knn = new KNearestNeighbors(5);
+
 
 //			for(Instance i : data) {
 //				Collection<Double> values = i.values();
@@ -34,7 +40,7 @@ public class Main {
 //				System.out.println();
 //			}
 
-			Classifier knn = new KNearestNeighbors(5);
+
 
 			Pair<Dataset, Dataset> data2 = s.sample(data, (int) (data.size() * 0.8));
 
@@ -42,8 +48,36 @@ public class Main {
 
 			Map<Object, PerformanceMeasure> map = EvaluateDataset.testDataset(knn, data2.y());
 
-			for(Object o:map.keySet())
-				System.out.println(o + ": " + map.get(o).getAccuracy());
+			double accuracy = 0;
+			int i = 0;
+
+			for(Object o:map.keySet()) {
+
+				accuracy += map.get(o).getAccuracy();
+				i++;
+
+				System.out.println(o + " Accuracy: " + map.get(o).getAccuracy());
+				System.out.println(o + " BCR: " + map.get(o).getBCR());
+				System.out.println(o + " Correlation: " + map.get(o).getCorrelation());
+				System.out.println(o + " Correlation Coefficient: " + map.get(o).getCorrelationCoefficient());
+				System.out.println(o + " Cost: " + map.get(o).getCost());
+				System.out.println(o + " Error rate: " + map.get(o).getErrorRate());
+				System.out.println(o + " F Measure: " + map.get(o).getFMeasure());
+				System.out.println(o + " FN Rate: " + map.get(o).getFNRate());
+				System.out.println(o + " FP Rate: " + map.get(o).getFPRate());
+				System.out.println(o + " Precision: " + map.get(o).getPrecision());
+				System.out.println(o + " Q9: " + map.get(o).getQ9());
+				System.out.println(o + " Recall: " + map.get(o).getRecall());
+				System.out.println(o + " TN Rate: " + map.get(o).getTNRate());
+				System.out.println(o + " Total: " + map.get(o).getTotal());
+				System.out.println(o + " TP Rate: " + map.get(o).getTPRate());
+				System.out.println();
+				System.out.println();
+			}
+
+			accuracy /= i;
+
+			System.out.println("Total Accuracy: "  + accuracy);
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
