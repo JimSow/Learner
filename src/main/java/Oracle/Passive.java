@@ -1,5 +1,6 @@
 package Oracle;
 
+import Learner.StopCondition;
 import net.sf.javaml.core.Dataset;
 import net.sf.javaml.core.Instance;
 
@@ -12,9 +13,14 @@ public class Passive extends IOracle {
 
 	private Random rand;
 
-	private Passive(Dataset pUnlabeledData) {
+	public Passive(Dataset pUnlabeledData) {
 		super(pUnlabeledData);
 		rand = new Random();
+	}
+
+	public Passive(Dataset pUnlabeledData, int seed) {
+		super(pUnlabeledData);
+		rand = new Random(seed);
 	}
 
 	@Override
