@@ -29,18 +29,21 @@ public class LearnerTest {
 		try {
 			String dataFile = "data/credit-g.arff";
 			int classLoc = 20;
-			int numItter = 10;
+			int numItter = 100;
+
+			StopCondition st1 = new StopCondition(1000);
+			StopCondition st2 = new StopCondition(10, 1000, .65);
 
 //			runBoth   (dataFile, classLoc, numItter);
-			runPassive(dataFile, classLoc, numItter);
-			runActive (dataFile, classLoc, numItter);
+			runPassive(dataFile, classLoc, numItter, st2);
+			runActive (dataFile, classLoc, numItter, st2);
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void runActive (String fileLocation, int classLoc, int pNumItter) throws FileNotFoundException {
+	public static void runActive (String fileLocation, int classLoc, int pNumItter, StopCondition st) throws FileNotFoundException {
 		double averageAccuracyActive  = 0;
 		double averageNumTestsActive  = 0;
 
@@ -60,14 +63,11 @@ public class LearnerTest {
 			data = data2.x();
 			Dataset testData = data2.y();
 
-			StopCondition st1 = new StopCondition(data.size());
-			StopCondition st2 = new StopCondition(10, data.size(), .72);
-
 			ReverseCenter rc = new ReverseCenter(data);
 
 			Classifier knn = new KNearestNeighbors(5);
 
-			Learner l1 = new Learner(rc, knn, testData, st2);
+			Learner l1 = new Learner(rc, knn, testData, st);
 
 			l1.run();
 			ResultSet rs1 = l1.getResultSet();
@@ -92,7 +92,7 @@ public class LearnerTest {
 		System.out.println("Average Number of Tests   : " + averageNumTestsActive      );
 	}
 
-	public static void runPassive(String fileLocation, int classLoc, int pNumItter) throws FileNotFoundException {
+	public static void runPassive(String fileLocation, int classLoc, int pNumItter, StopCondition st) throws FileNotFoundException {
 		double averageAccuracyPassive = 0;
 		double averageNumTestsPassive = 0;
 
@@ -112,14 +112,11 @@ public class LearnerTest {
 			data = data2.x();
 			Dataset testData = data2.y();
 
-			StopCondition st1 = new StopCondition(data.size());
-			StopCondition st2 = new StopCondition(10, data.size(), .72);
-
 			Passive p = new Passive(data, 1);
 
 			Classifier knn = new KNearestNeighbors(5);
 
-			Learner l2 = new Learner(p , knn, testData, st2);
+			Learner l2 = new Learner(p , knn, testData, st);
 
 			l2.run();
 			ResultSet rs2 = l2.getResultSet();
@@ -144,7 +141,7 @@ public class LearnerTest {
 
 	}
 
-	public static void runBoth   (String fileLocation, int classLoc, int pNumItter) throws FileNotFoundException {
+	public static void runBoth   (String fileLocation, int classLoc, int pNumItter, StopCondition st) throws FileNotFoundException {
 		double averageAccuracyActive  = 0;
 		double averageNumTestsActive  = 0;
 		double averageAccuracyPassive = 0;
@@ -167,9 +164,6 @@ public class LearnerTest {
 			data = data2.x();
 			Dataset testData = data2.y();
 
-			StopCondition st1 = new StopCondition(data.size());
-			StopCondition st2 = new StopCondition(10, data.size(), .72);
-
 			Passive p = new Passive(data, 1);
 			Center c = new Center(data);
 			ReverseCenter rc = new ReverseCenter(data);
@@ -177,8 +171,8 @@ public class LearnerTest {
 
 			Classifier knn = new KNearestNeighbors(5);
 
-			Learner l1 = new Learner(rc, knn, testData, st2);
-			Learner l2 = new Learner(p , knn, testData, st2);
+			Learner l1 = new Learner(rc, knn, testData, st);
+			Learner l2 = new Learner(p , knn, testData, st);
 
 			l1.run();
 			l2.run();
