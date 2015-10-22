@@ -22,8 +22,6 @@ public class Learner implements Runnable {
 
 	private Classifier test;
 
-	private Sampling sample;
-
 	private Dataset labeledData;
 	private Dataset testData;
 
@@ -43,7 +41,6 @@ public class Learner implements Runnable {
 
 	public Learner(IOracle pOracle, Classifier pTest, Dataset pTestData, StopCondition pTarget, int pInitialTestsToRun) {
 		test   = pTest;
-		sample = Sampling.SubSampling;
 		labeledData = new DefaultDataset();
 		testData = pTestData;
 		target = pTarget;
@@ -145,6 +142,28 @@ public class Learner implements Runnable {
 
 	public Map<Object, PerformanceMeasure> getResults() {
 		return latestResults;
+	}
+
+	public double getAccuracy() {
+		double accuracy = 0;
+		int i = 0;
+
+		for(Object o:latestResults.keySet()) {
+
+			accuracy += latestResults.get(o).getAccuracy();
+			i++;
+
+		}
+
+		return accuracy / i;
+	}
+
+	public int getNumTests() {
+		return numTests;
+	}
+
+	public ResultSet getResultSet() {
+		return new ResultSet(latestResults, numTests);
 	}
 
 	private boolean runTest() {
