@@ -3,13 +3,12 @@ package Tests.LearnerTests;
 import Learner.StopCondition;
 import Learner.Learner;
 import Learner.ResultSet;
-import Oracle.Center;
-import Oracle.Passive;
-import Oracle.ReverseCenter;
+import Retriever.Center;
+import Retriever.Passive;
+import Retriever.ReverseCenter;
 import be.abeel.util.Pair;
 import net.sf.javaml.classification.Classifier;
 import net.sf.javaml.classification.KNearestNeighbors;
-import net.sf.javaml.classification.bayes.KDependentBayesClassifier;
 import net.sf.javaml.classification.evaluation.EvaluateDataset;
 import net.sf.javaml.classification.evaluation.PerformanceMeasure;
 import net.sf.javaml.core.Dataset;
@@ -27,12 +26,12 @@ import java.util.Map;
 public class LearnerTest {
 	public static void main(String[] argc) {
 		try {
-			String dataFile = "data/credit-g.arff";
-			int classLoc = 20;
-			int numItter = 100;
+			String dataFile = "data/adult.arff";
+			int classLoc = 14;
+			int numItter = 10;
 
 			StopCondition st1 = new StopCondition(1000);
-			StopCondition st2 = new StopCondition(10, 1000, .65);
+			StopCondition st2 = new StopCondition(500, 31000, .81);
 
 //			runBoth   (dataFile, classLoc, numItter);
 			runPassive(dataFile, classLoc, numItter, st2);

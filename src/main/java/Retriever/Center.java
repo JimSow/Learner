@@ -1,4 +1,4 @@
-package Oracle;
+package Retriever;
 
 import Utilities.DataSetUtils;
 import net.sf.javaml.clustering.Clusterer;
@@ -8,6 +8,7 @@ import net.sf.javaml.core.Instance;
 import net.sf.javaml.distance.EuclideanDistance;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -20,7 +21,7 @@ import java.util.Random;
  *
  * Created by jared on 10/15/15.
  */
-public class Center extends IOracle {
+public class Center extends IRetriever {
 
 	private Random rand;
 
@@ -46,6 +47,19 @@ public class Center extends IOracle {
 
 		return set.remove(0);
 	}
+
+	@Override
+	public List<Instance> get(int amount) {
+		List<Instance> instances = new ArrayList<Instance>(amount);
+
+		while (amount > 0) {
+			instances.add(getNext());
+			--amount;
+		}
+
+		return instances;
+	}
+
 
 	private void getNextInstances() {
 		if(unlabeledData.size() <= 5) {

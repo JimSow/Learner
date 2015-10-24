@@ -1,14 +1,12 @@
 package Learner;
 
-import Oracle.IOracle;
-import be.abeel.util.Pair;
+import Retriever.IRetriever;
 import net.sf.javaml.classification.Classifier;
 import net.sf.javaml.classification.evaluation.EvaluateDataset;
 import net.sf.javaml.classification.evaluation.PerformanceMeasure;
 import net.sf.javaml.core.Dataset;
 import net.sf.javaml.core.DefaultDataset;
 import net.sf.javaml.core.Instance;
-import net.sf.javaml.sampling.Sampling;
 
 import java.util.Map;
 
@@ -27,20 +25,21 @@ public class Learner implements Runnable {
 
 	private StopCondition target;
 
-	private IOracle oracle;
+	private IRetriever oracle;
 
 	private Map<Object, PerformanceMeasure> latestResults;
 
-	public Learner(IOracle pOracle, Classifier pTest, Dataset pTestData) {
+	public Learner(IRetriever pOracle, Classifier pTest, Dataset pTestData) {
 		this(pOracle, pTest, pTestData, new StopCondition(10, 100, .7), 10);
 	}
 
-	public Learner(IOracle pOracle, Classifier pTest, Dataset pTestData, StopCondition pTarget) {
+	public Learner(IRetriever pOracle, Classifier pTest, Dataset pTestData, StopCondition pTarget) {
 		this(pOracle, pTest, pTestData, pTarget, 10);
 	}
 
-	public Learner(IOracle pOracle, Classifier pTest, Dataset pTestData, StopCondition pTarget, int pInitialTestsToRun) {
-		test   = pTest;
+	public Learner(IRetriever pOracle, Classifier pTest, Dataset pTestData, StopCondition pTarget, int
+			pInitialTestsToRun) {
+		test = pTest;
 		labeledData = new DefaultDataset();
 		testData = pTestData;
 		target = pTarget;

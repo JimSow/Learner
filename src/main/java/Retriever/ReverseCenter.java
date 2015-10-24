@@ -1,20 +1,19 @@
-package Oracle;
+package Retriever;
 
 import net.sf.javaml.core.Dataset;
-import net.sf.javaml.core.DefaultDataset;
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.distance.DistanceMeasure;
 import net.sf.javaml.distance.EuclideanDistance;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
  * Created by jared on 10/16/15.
  */
-public class ReverseCenter extends IOracle {
+public class ReverseCenter extends IRetriever {
 	private DistanceMeasure dm;
-
-	private Dataset labeledData;
 
 	private Instance next;
 
@@ -28,23 +27,28 @@ public class ReverseCenter extends IOracle {
 		int first = getFirst();
 
 		next = unlabeledData.remove(first);
-
-		labeledData = new DefaultDataset();
 	}
 
 	@Override
-	public Instance getNext() {
-		Instance temp = next;
+	public List<Instance> get(int amount) {
+		List<Instance> instances = new ArrayList<Instance>(amount);
 
-		next = getFurthest();
+		while (amount > 0) {
+			instances.add(next);
 
-		if(next == null)
+			next = getFurthest();
+
+			if(next == null)
+				break;
+
+			unlabeledData.remove(next);
+			labeledData.add(next);
+
+			--amount;
+		}
+		if(instances.size() <= 0)
 			return null;
-
-		unlabeledData.remove(next);
-		labeledData.add(next);
-
-		return temp;
+		return instances;
 	}
 
 	private Instance getFurthest() {
