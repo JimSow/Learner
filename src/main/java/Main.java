@@ -1,12 +1,8 @@
-import Learner.Learner;
-import Learner.StopCondition;
-import Oracle.Passive;
 import net.sf.javaml.classification.Classifier;
 import net.sf.javaml.classification.KNearestNeighbors;
 import net.sf.javaml.classification.evaluation.EvaluateDataset;
 import net.sf.javaml.classification.evaluation.PerformanceMeasure;
 import net.sf.javaml.core.Dataset;
-import net.sf.javaml.core.Instance;
 import net.sf.javaml.filter.normalize.NormalizeMidrange;
 import net.sf.javaml.sampling.Sampling;
 import net.sf.javaml.tools.data.ARFFHandler;
@@ -15,7 +11,6 @@ import be.abeel.util.Pair;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Collection;
 import java.util.Map;
 
 public class Main {
