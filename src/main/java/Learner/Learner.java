@@ -1,5 +1,6 @@
 package Learner;
 
+import Oracle.IOracle;
 import Retriever.IRetriever;
 import net.sf.javaml.classification.Classifier;
 import net.sf.javaml.classification.evaluation.EvaluateDataset;
@@ -25,25 +26,26 @@ public class Learner implements Runnable {
 
 	private StopCondition target;
 
-	private IRetriever oracle;
+	private IRetriever retriever;
+
+	private IOracle oracle;
 
 	private Map<Object, PerformanceMeasure> latestResults;
 
-	public Learner(IRetriever pOracle, Classifier pTest, Dataset pTestData) {
-		this(pOracle, pTest, pTestData, new StopCondition(10, 100, .7), 10);
+	public Learner(IRetriever pRetriever, IOracle pOracle, Classifier pTest, Dataset pTestData) {
+		this(pRetriever, pOracle, pTest, pTestData, new StopCondition(10, 100, .7), 10);
 	}
-
-	public Learner(IRetriever pOracle, Classifier pTest, Dataset pTestData, StopCondition pTarget) {
-		this(pOracle, pTest, pTestData, pTarget, 10);
+	public Learner(IRetriever pRetriever, IOracle pOracle, Classifier pTest, Dataset pTestData, StopCondition pTarget) {
+		this(pRetriever, pOracle, pTest, pTestData, pTarget, 10);
 	}
-
-	public Learner(IRetriever pOracle, Classifier pTest, Dataset pTestData, StopCondition pTarget, int
+	public Learner(IRetriever pRetriever, IOracle pOracle, Classifier pTest, Dataset pTestData, StopCondition pTarget, int
 			pInitialTestsToRun) {
-		test = pTest;
-		labeledData = new DefaultDataset();
-		testData = pTestData;
-		target = pTarget;
-		oracle = pOracle;
+		test 			  = pTest;
+		labeledData		  = new DefaultDataset();
+		testData		  = pTestData;
+		target			  = pTarget;
+		retriever 		  = pRetriever;
+		oracle 			  = pOracle;
 		initialTestsToRun = pInitialTestsToRun;
 	}
 
@@ -166,10 +168,12 @@ public class Learner implements Runnable {
 	}
 
 	private boolean runTest() {
-		Instance i = oracle.getNext();
+		Instance i = retriever.getNext();
 
 		if(i == null)
 			return false;
+
+		i.setClassValue(oracle.getLabel(i));
 
 		labeledData.add(i);
 		numTests++;
