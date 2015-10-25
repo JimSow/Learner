@@ -3,6 +3,8 @@ package Tests.LearnerTests;
 import Learner.StopCondition;
 import Learner.Learner;
 import Learner.ResultSet;
+import Oracle.IOracle;
+import Oracle.SimpleOracle;
 import Retriever.Center;
 import Retriever.Passive;
 import Retriever.ReverseCenter;
@@ -66,7 +68,9 @@ public class LearnerTest {
 
 			Classifier knn = new KNearestNeighbors(5);
 
-			Learner l1 = new Learner(rc, knn, testData, st);
+			IOracle oracle = new SimpleOracle(data);
+
+			Learner l1 = new Learner(rc, oracle, knn, testData, st);
 
 			l1.run();
 			ResultSet rs1 = l1.getResultSet();
@@ -115,7 +119,9 @@ public class LearnerTest {
 
 			Classifier knn = new KNearestNeighbors(5);
 
-			Learner l2 = new Learner(p , knn, testData, st);
+			IOracle oracle = new SimpleOracle(data);
+
+			Learner l2 = new Learner(p, oracle, knn, testData, st);
 
 			l2.run();
 			ResultSet rs2 = l2.getResultSet();
@@ -170,8 +176,10 @@ public class LearnerTest {
 
 			Classifier knn = new KNearestNeighbors(5);
 
-			Learner l1 = new Learner(rc, knn, testData, st);
-			Learner l2 = new Learner(p , knn, testData, st);
+			IOracle oracle = new SimpleOracle(data);
+
+			Learner l1 = new Learner(rc, oracle, knn, testData, st);
+			Learner l2 = new Learner(p , oracle, knn, testData, st);
 
 			l1.run();
 			l2.run();
