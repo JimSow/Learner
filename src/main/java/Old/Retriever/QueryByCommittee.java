@@ -1,4 +1,4 @@
-package Retriever;
+package Old.Retriever;
 
 import net.sf.javaml.classification.*;
 import net.sf.javaml.classification.bayes.NaiveBayesClassifier;

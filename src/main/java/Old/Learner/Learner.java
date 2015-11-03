@@ -1,7 +1,9 @@
-package Learner;
+package Old.Learner;
 
 import Oracle.IOracle;
-import Retriever.IRetriever;
+import Old.Retriever.IRetriever;
+import Learner.StopCondition;
+import Learner.ResultSet;
 import net.sf.javaml.classification.Classifier;
 import net.sf.javaml.classification.evaluation.EvaluateDataset;
 import net.sf.javaml.classification.evaluation.PerformanceMeasure;
@@ -35,9 +37,12 @@ public class Learner implements Runnable {
 	public Learner(IRetriever pRetriever, IOracle pOracle, Classifier pTest, Dataset pTestData) {
 		this(pRetriever, pOracle, pTest, pTestData, new StopCondition(10, 100, .7), 10);
 	}
-	public Learner(IRetriever pRetriever, IOracle pOracle, Classifier pTest, Dataset pTestData, StopCondition pTarget) {
+
+	public Learner(IRetriever pRetriever, IOracle pOracle, Classifier pTest, Dataset pTestData, StopCondition
+			pTarget) {
 		this(pRetriever, pOracle, pTest, pTestData, pTarget, 10);
 	}
+
 	public Learner(IRetriever pRetriever, IOracle pOracle, Classifier pTest, Dataset pTestData, StopCondition pTarget, int
 			pInitialTestsToRun) {
 		test 			  = pTest;
@@ -53,14 +58,15 @@ public class Learner implements Runnable {
 		runInitial(initialTestsToRun);
 
 		do {
-			if(!runTest())
+			if(!runTest()) {
 				break;
+			}
 
 			test.buildClassifier(labeledData);
 
 			latestResults = EvaluateDataset.testDataset(test, testData);
 
-		} while(!target.Stop(latestResults, numTests));
+		} while(!target.Stop(getResultSet(), numTests));
 	}
 
 	public void verboseRun() {
@@ -76,7 +82,7 @@ public class Learner implements Runnable {
 
 			printResultBasic();
 
-		} while(!target.Stop(latestResults, numTests));
+		} while(!target.Stop(getResultSet(), numTests));
 	}
 
 	public void printResult() {
@@ -170,10 +176,19 @@ public class Learner implements Runnable {
 	private boolean runTest() {
 		Instance i = retriever.getNext();
 
-		if(i == null)
+		if(i == null) {
+			System.out.println("instance is null");
 			return false;
+		}
 
-		i.setClassValue(oracle.getLabel(i));
+		Object label = oracle.getLabel(i);
+
+		if(label == null) {
+			System.out.println("Label is null");
+			return false;
+		}
+
+		i.setClassValue(label);
 
 		labeledData.add(i);
 		numTests++;
