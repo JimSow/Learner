@@ -1,13 +1,9 @@
 package Tests.LearnerTests;
 
-import Learner.StopCondition;
-import Learner.Learner;
-import Learner.ResultSet;
+import Learner.*;
+import Old.Learner.UncertaintySampler;
 import Oracle.IOracle;
 import Oracle.SimpleOracle;
-import Retriever.Center;
-import Retriever.Passive;
-import Retriever.ReverseCenter;
 import be.abeel.util.Pair;
 import net.sf.javaml.classification.Classifier;
 import net.sf.javaml.classification.KNearestNeighbors;
@@ -27,13 +23,14 @@ import java.util.Map;
  */
 public class LearnerTest {
 	public static void main(String[] argc) {
-		try {
-			String dataFile = "data/adult.arff";
-			int classLoc = 14;
-			int numItter = 10;
 
-			StopCondition st1 = new StopCondition(1000);
-			StopCondition st2 = new StopCondition(500, 31000, .81);
+		try {
+			String dataFile = "data/iris.arff";
+			int classLoc = 4;
+			int numItter = 1000;
+
+			StopCondition st1 = new StopCondition(150);
+			StopCondition st2 = new StopCondition(3, 100, .94);
 
 //			runBoth   (dataFile, classLoc, numItter);
 			runPassive(dataFile, classLoc, numItter, st2);
@@ -45,6 +42,7 @@ public class LearnerTest {
 	}
 
 	public static void runActive (String fileLocation, int classLoc, int pNumItter, StopCondition st) throws FileNotFoundException {
+		System.out.println("Running Active Learner");
 		double averageAccuracyActive  = 0;
 		double averageNumTestsActive  = 0;
 
@@ -64,16 +62,15 @@ public class LearnerTest {
 			data = data2.x();
 			Dataset testData = data2.y();
 
-			ReverseCenter rc = new ReverseCenter(data);
-
 			Classifier knn = new KNearestNeighbors(5);
+//			knn = new KNN(5, new EuclideanDistance());
 
 			IOracle oracle = new SimpleOracle(data);
 
-			Learner l1 = new Learner(rc, oracle, knn, testData, st);
+			ILearner l1 = new UncertaintySampler(oracle, knn, data, testData, st, 10);
 
 			l1.run();
-			ResultSet rs1 = l1.getResultSet();
+			ResultSet rs1 = l1.getResults();
 
 //			System.out.println("Completed test #" + (numItter - pNumItter));
 //			System.out.println("Active Results");
@@ -96,6 +93,7 @@ public class LearnerTest {
 	}
 
 	public static void runPassive(String fileLocation, int classLoc, int pNumItter, StopCondition st) throws FileNotFoundException {
+		System.out.println("Running Passive Learner");
 		double averageAccuracyPassive = 0;
 		double averageNumTestsPassive = 0;
 
@@ -115,16 +113,14 @@ public class LearnerTest {
 			data = data2.x();
 			Dataset testData = data2.y();
 
-			Passive p = new Passive(data, 1);
-
 			Classifier knn = new KNearestNeighbors(5);
 
 			IOracle oracle = new SimpleOracle(data);
 
-			Learner l2 = new Learner(p, oracle, knn, testData, st);
+			ILearner l2 = new PassiveLearner(oracle, knn, data, testData, st, 10);
 
 			l2.run();
-			ResultSet rs2 = l2.getResultSet();
+			ResultSet rs2 = l2.getResults();
 
 //			System.out.println("Completed test #" + (numItter - pNumItter));
 //			System.out.println("Passive Results");
@@ -147,6 +143,7 @@ public class LearnerTest {
 	}
 
 	public static void runBoth   (String fileLocation, int classLoc, int pNumItter, StopCondition st) throws FileNotFoundException {
+		System.out.println("Running Both Learners");
 		double averageAccuracyActive  = 0;
 		double averageNumTestsActive  = 0;
 		double averageAccuracyPassive = 0;
@@ -169,22 +166,17 @@ public class LearnerTest {
 			data = data2.x();
 			Dataset testData = data2.y();
 
-			Passive p = new Passive(data, 1);
-			Center c = new Center(data);
-			ReverseCenter rc = new ReverseCenter(data);
-
-
 			Classifier knn = new KNearestNeighbors(5);
 
 			IOracle oracle = new SimpleOracle(data);
 
-			Learner l1 = new Learner(rc, oracle, knn, testData, st);
-			Learner l2 = new Learner(p , oracle, knn, testData, st);
+			ILearner l1 = new PassiveLearner(oracle, knn, data, testData, st, 10);
+			ILearner l2 = new PassiveLearner(oracle, knn, data, testData, st, 10);
 
 			l1.run();
 			l2.run();
-			ResultSet rs1 = l1.getResultSet();
-			ResultSet rs2 = l2.getResultSet();
+			ResultSet rs1 = l1.getResults();
+			ResultSet rs2 = l2.getResults();
 
 			System.out.println("Completed test #" + (numItter - pNumItter));
 			System.out.println("Active Results");
