@@ -1,5 +1,6 @@
 package Learner;
 
+import Old.Learner.Learner;
 import net.sf.javaml.classification.evaluation.PerformanceMeasure;
 
 import java.util.Map;
@@ -101,4 +102,29 @@ public class ResultSet {
 	public double getTPRate() 					{ return TPRate;				 }
 
 	public int getNumTests() { return NumTests;	}
+
+	public void printResults() {
+		System.out.println();
+		System.out.println();
+		System.out.println("Results:");
+		System.out.println("\tAccuracy: ================ " + Accuracy);
+		System.out.println("\tBCR: --------------------- " + BCR);
+		System.out.println("\tCorrelation: ============= " + Correlation);
+		System.out.println("\tCorrelation Coefficient: - " + CorrelationCoefficient);
+		System.out.println("\tCost: ==================== " + Cost);
+		System.out.println("\tError rate: -------------- " + ErrorRate);
+		System.out.println("\tF Measure: =============== " + FMeasure);
+		System.out.println("\tFN Rate: ----------------- " + FNRate);
+		System.out.println("\tFP Rate: ================= " + FPRate);
+		System.out.println("\tPrecision: --------------- " + Precision);
+		System.out.println("\tQ9: ====================== " + Q9);
+		System.out.println("\tRecall: ------------------ " + Recall);
+		System.out.println("\tTN Rate: ================= " + TNRate);
+		System.out.println("\tTotal: ------------------- " + Total);
+		System.out.println("\tTP Rate: ================= " + TPRate);
+		System.out.println();
+		System.out.println("Total Number of tests run: - " + NumTests);
+		System.out.println();
+		System.out.println();
+	}
 }
