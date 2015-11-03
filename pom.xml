@@ -24,5 +24,12 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/ajt-2.9.jar</systemPath>
         </dependency>
+
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>weka-stable</artifactId>
+            <version>3.6.6</version>
+        </dependency>
+
     </dependencies>
 </project>
