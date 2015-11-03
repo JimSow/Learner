@@ -1,9 +1,5 @@
 package Learner;
 
-import net.sf.javaml.classification.evaluation.PerformanceMeasure;
-
-import java.util.Map;
-
 /**
  * Created by jared on 10/15/15.
  */
@@ -16,7 +12,7 @@ public class StopCondition {
 
 	// Run pMaxNumTests regardless of anything else
 	public StopCondition(int pNumTestsToRun) {
-		this(0, pNumTestsToRun, 1, 1);
+		this(pNumTestsToRun, pNumTestsToRun, 1, 1);
 	}
 
 	//Run tests until you reach pTargetAccuracy regardless of anything except pMaxNumTests
@@ -32,31 +28,14 @@ public class StopCondition {
 		targetRecall   = pTargetRecall;
 	}
 
-
-	public boolean Stop(Map<Object, PerformanceMeasure> pm, int pNumTests) {
+	public boolean Stop(ResultSet set, int pNumTests) {
 		if(pNumTests < minNumTests)
 			return false;
 		if(pNumTests >= maxNumTests)
 			return true;
-
-		double accuracy = 0;
-		double recall   = 0;
-		int i = 0;
-
-		for(Object o : pm.keySet()) {
-			accuracy += pm.get(o).getAccuracy();
-			recall   += pm.get(o).getRecall();
-			i++;
-		}
-
-		accuracy /= i;
-		recall   /= i;
-
-		if(accuracy >= targetAccuracy && recall >= targetRecall)
+		if(set.Accuracy >= targetAccuracy && set.Recall >= targetRecall) {
 			return true;
-
+		}
 		return false;
 	}
-
-
 }
