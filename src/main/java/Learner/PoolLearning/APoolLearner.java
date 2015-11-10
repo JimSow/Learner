@@ -34,11 +34,9 @@ public abstract class APoolLearner implements ILearner {
 
 	private ResultSet latestResults;
 
-	public int getNumTests() { return numTests; }
-
+	public int    getNumTests() { return numTests;                    }
 	public double getAccuracy() { return latestResults.getAccuracy(); }
-
-	public double getRecall() { return latestResults.getRecall(); }
+	public double getRecall  () { return latestResults.getRecall  (); }
 
 //	public APoolLearner(IOracle pOracle, Classifier pTest, Dataset pTestData) {
 //		this(pOracle, pTest, pTestData, new StopCondition(10, 100, .7), 10);
