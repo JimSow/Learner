@@ -1,6 +1,8 @@
 package Tests.LearnerTests;
 
 import Learner.*;
+import Learner.HypothesisSpaceSearch.StreamLearning.AStreamLearner;
+import Learner.HypothesisSpaceSearch.StreamLearning.QueryByCommitee;
 import Old.Learner.UncertaintySampler;
 import Oracle.IOracle;
 import Oracle.SimpleOracle;
@@ -33,12 +35,60 @@ public class LearnerTest {
 			StopCondition st2 = new StopCondition(3, 100, .94);
 
 //			runBoth   (dataFile, classLoc, numItter);
-			runPassive(dataFile, classLoc, numItter, st2);
-			runActive (dataFile, classLoc, numItter, st2);
+//			runPassive(dataFile, classLoc, numItter, st2);
+//			runActive (dataFile, classLoc, numItter, st2);
+			runStream (dataFile, classLoc, numItter, st2);
+
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void runStream(String fileLocation, int classLoc, int pNumItter, StopCondition st) throws FileNotFoundException {
+		System.out.println("Running Stream Learner");
+		double averageAccuracyActive  = 0;
+		double averageNumTestsActive  = 0;
+
+		double numItter = pNumItter;
+
+		while(pNumItter > 0) {
+			Dataset data = ARFFHandler.loadARFF(new File(fileLocation), classLoc);
+
+			NormalizeMidrange nmr = new NormalizeMidrange(0, 2);
+			nmr.build(data);
+			nmr.filter(data);
+
+			Sampling s = Sampling.SubSampling;
+
+			Pair<Dataset, Dataset> data2 = s.sample(data, (int) (data.size() * 0.7), 1);
+
+			data = data2.x();
+			Dataset testData = data2.y();
+
+			Classifier knn = new KNearestNeighbors(5);
+//			knn = new KNN(5, new EuclideanDistance());
+
+			IOracle oracle = new SimpleOracle(data);
+
+			AStreamLearner l1 = new QueryByCommitee(knn, oracle, testData, st, .9);
+
+			l1.runDataSet(data);
+			ResultSet rs1 = l1.getResults();
+
+			averageAccuracyActive  += rs1.getAccuracy();
+			averageNumTestsActive  += rs1.getNumTests();
+
+			--pNumItter;
+		}
+
+		averageAccuracyActive  /= numItter;
+		averageNumTestsActive  /= numItter;
+
+		System.out.println("Number of Learners Trained: " + numItter );
+		System.out.println("Active Results");
+		System.out.println("Average Accuracy          : " + averageAccuracyActive + "%");
+		System.out.println("Average Number of Tests   : " + averageNumTestsActive      );
 	}
 
 	public static void runActive (String fileLocation, int classLoc, int pNumItter, StopCondition st) throws FileNotFoundException {
