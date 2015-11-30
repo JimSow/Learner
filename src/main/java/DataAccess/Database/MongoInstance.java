@@ -7,5 +7,9 @@ import org.mongodb.morphia.annotations.Entity;
  */
 @Entity("Instance")
 public class MongoInstance {
+	String filePath;
+
+	double length;
+	double dimensions;
 
 }

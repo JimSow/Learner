@@ -14,7 +14,6 @@ public class MongoDataAccessObject implements IDataAccessObject {
 
 	final Morphia morphia;
 
-
 	// create the Datastore connecting to the default port on the local host
 	final Datastore datastore;
 
@@ -27,20 +26,29 @@ public class MongoDataAccessObject implements IDataAccessObject {
 
 	}
 
+	public Boolean hasInstance(int id) {
+		return datastore.createQuery(MongoDataSet.class)
+				.field("_id").equal(id)
+				.asList()
+				.size() > 0;
+	}
 
 	public Instance getInstance(int id) {
-		return null;
+		if(!hasInstance(id))
+			return null;
+
+		return datastore.createQuery(MongoDataSet.class)
+				.field("_id").equal(id)
+				.asList()
+				.get(0)
+				.getAsInstance();
 	}
 
 	public Object getLabel(int id) {
-		return null;
+		return getInstance(id).classValue();
 	}
 
-	public Dataset getDataset() {
+	public Dataset getDataset(int[] ids) {
 		return null;
-	}
-
-	public int getCount() {
-		return 0;
 	}
 }

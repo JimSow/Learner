@@ -1,8 +1,12 @@
+import DataAccess.Database.MySQLDataAccessObject;
 import net.sf.javaml.classification.Classifier;
 import net.sf.javaml.classification.KNearestNeighbors;
+import net.sf.javaml.classification.NearestMeanClassifier;
+import net.sf.javaml.classification.bayes.NaiveBayesClassifier;
 import net.sf.javaml.classification.evaluation.EvaluateDataset;
 import net.sf.javaml.classification.evaluation.PerformanceMeasure;
 import net.sf.javaml.core.Dataset;
+import net.sf.javaml.core.Instance;
 import net.sf.javaml.filter.normalize.NormalizeMidrange;
 import net.sf.javaml.sampling.Sampling;
 import net.sf.javaml.tools.data.ARFFHandler;
@@ -11,6 +15,8 @@ import be.abeel.util.Pair;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Main {
@@ -18,7 +24,12 @@ public class Main {
     public static void main(String[] args) {
 		try {
 			Sampling s = Sampling.SubSampling;
-			Dataset data = ARFFHandler.loadARFF(new File("data/Iris.arff"), 4);
+//			Dataset data = ARFFHandler.loadARFF(new File("data/Iris.arff"), 4);
+
+			MySQLDataAccessObject dao = new MySQLDataAccessObject(createAlgorithms());
+
+			Dataset data = dao.getLabeledDataset(createIds(500, 1, 1));
+
 
 			NormalizeMidrange nmr = new NormalizeMidrange(0, 2);
 			nmr.build(data);
@@ -26,6 +37,7 @@ public class Main {
 
 			Classifier knn = new KNearestNeighbors(5);
 
+//			Classifier knn = new NearestMeanClassifier();
 
 //			for(Instance i : data) {
 //				Collection<Double> values = i.values();
@@ -74,8 +86,51 @@ public class Main {
 
 			System.out.println("Total Accuracy: "  + accuracy);
 
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static int[] createIds(int size, int start, int offset) {
+		if(size < 1)
+			size = 1;
+		if(size > 500)
+			size = 500;
+		if(start < 1 || start > 500)
+			start = 1;
+		if(offset < 1 || offset * size > 500)
+			offset = 1;
+
+		MySQLDataAccessObject dao = new MySQLDataAccessObject(createAlgorithms());
+
+		int[] ids = new int[size];
+
+		for(int i = 0; i < size; ++i) {
+			ids[i] = start;
+
+			String label = (String) dao.getLabel(start);
+			if(label == null || label.isEmpty()) {
+				i--;
+			}
+
+			start += offset;
+		}
+
+		return ids;
+	}
+
+	public static List<String> createAlgorithms() {
+		List<String> algorithms = new ArrayList<String>();
+
+		algorithms.add("weka.IBk(%)");
+		algorithms.add("weka.J48(%)");
+		algorithms.add("weka.RandomTree(%)");
+		algorithms.add("weka.SimpleLogistic(%)");
+		algorithms.add("weka.DecisionStump(%)");
+		algorithms.add("weka.ZeroR(%)");
+		algorithms.add("weka.NaiveBayes(%)");
+		algorithms.add("weka.KStar(%)");
+
+		return algorithms;
 	}
 }

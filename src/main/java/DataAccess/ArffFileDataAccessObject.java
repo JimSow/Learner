@@ -44,6 +44,11 @@ public class ArffFileDataAccessObject implements IDataAccessObject {
 		return data.instance(id).classValue();
 	}
 
+	//TODO Implement method getDataset(int[] ids)
+	public Dataset getDataset(int[] ids) {
+		return null;
+	}
+
 	public Dataset getDataset() {
 		return data;
 	}

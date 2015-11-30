@@ -49,8 +49,9 @@ public abstract class AStreamLearner implements ILearner {
 	public Boolean runInstance(Instance pNewInstance) {
 		Boolean result = runOne(pNewInstance);
 
+		//TODO need to rework stream learners (Potentially not implement ILearner
 		if(result) {
-			pNewInstance.setClassValue(oracle.getLabel(pNewInstance));
+//			pNewInstance.setClassValue(oracle.getLabel(pNewInstance));
 			labeledData.add(pNewInstance);
 			numTests++;
 		}

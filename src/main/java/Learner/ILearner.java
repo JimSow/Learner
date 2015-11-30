@@ -8,7 +8,6 @@ import net.sf.javaml.classification.Classifier;
 public interface ILearner {
 
 	Classifier run();
-	Classifier verbouseRun();
 
 	void printResult();
 

@@ -4,3 +4,11 @@
 *.class
 
 *.jar
+
+*.iml
+
+pom.xml
+
+*.xml
+
+lib/weka.jar

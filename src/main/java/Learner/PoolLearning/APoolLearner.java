@@ -42,17 +42,16 @@ public abstract class APoolLearner implements ILearner {
 //		this(pOracle, pTest, pTestData, new StopCondition(10, 100, .7), 10);
 //	}
 
-	public APoolLearner(IOracle pOracle, Classifier pTest, Dataset pUnlabeledData, Dataset pTestData, StopCondition
-			pTarget) {
-		this(pOracle, pTest, pUnlabeledData, pTestData, pTarget, 10);
-	}
+	public APoolLearner(IOracle pOracle, Classifier pTest, Dataset pUnlabeledData, Dataset pTestData,
+						StopCondition pTarget) { this(pOracle, pTest, pUnlabeledData, pTestData, pTarget, 10); }
 
 	public APoolLearner(IOracle pOracle, Classifier pTest, Dataset pUnlabeledData, Dataset pTestData, StopCondition pTarget, int
 			pInitialTestsToRun) {
+		numTests          = 0;
 		classifier		  = pTest;
 		labeledData		  = new DefaultDataset();
-		unlabeledData     = pUnlabeledData;
-		testData		  = pTestData;
+		unlabeledData     = pUnlabeledData.copy();
+		testData		  = pTestData.copy();
 		target			  = pTarget;
 		oracle 			  = pOracle;
 		initialTestsToRun = pInitialTestsToRun;
@@ -62,48 +61,16 @@ public abstract class APoolLearner implements ILearner {
 
 	public Classifier run() {
 		do {
-			Instance next = unlabeledData.remove(getNextInstanceIndex());
+			getNext();
 
-			Object label = oracle.getLabel(next);
-
-			next.setClassValue(label);
-
-			labeledData.add(next);
-
-			classifier.buildClassifier(labeledData);
-
-			Map<Object, PerformanceMeasure> results = EvaluateDataset.testDataset(classifier, testData);
-
-			++numTests;
-
-			latestResults = new ResultSet(results, numTests);
+			latestResults = test();
 		}
-		while(!target.Stop(getResults(), numTests));
+		while(!target.Stop(getResults(), numTests) && unlabeledData.size() > 0);
 
 		return classifier;
 	}
 
 	protected abstract int getNextInstanceIndex();
-
-	public Classifier verbouseRun() {
-		do {
-			Instance next = unlabeledData.remove(getNextInstanceIndex());
-
-			Object label = oracle.getLabel(next);
-
-			next.setClassValue(label);
-
-			labeledData.add(next);
-
-			classifier.buildClassifier(labeledData);
-
-
-			printResult();
-		}
-		while(!target.Stop(getResults(), numTests));
-
-		return classifier;
-	}
 
 	public void printResult() {
 		latestResults.printResults();
@@ -116,13 +83,35 @@ public abstract class APoolLearner implements ILearner {
 	private void initialize() {
 		Random rand = new Random();
 		for(;initialTestsToRun > 0; initialTestsToRun--) {
-			Instance next = unlabeledData.remove(rand.nextInt(unlabeledData.size()));
-			Object label = oracle.getLabel(next);
-			next.setClassValue(label);
-			labeledData.add(next);
-			++numTests;
+//			Instance next = unlabeledData.remove(rand.nextInt(unlabeledData.size()));
+//			Object label = oracle.getLabel(next);
+//			next.setClassValue(label);
+//			labeledData.add(next);
+			getNext();
 		}
 
 		classifier.buildClassifier(labeledData);
+	}
+
+	protected void getNext() {
+		int nextIndex = getNextInstanceIndex();
+
+		Instance next = unlabeledData.remove(nextIndex);
+
+		Object label = oracle.getLabel(nextIndex);
+
+		next.setClassValue(label);
+
+		labeledData.add(next);
+
+		++numTests;
+	}
+
+	private ResultSet test() {
+		classifier.buildClassifier(labeledData);
+
+		Map<Object, PerformanceMeasure> results = EvaluateDataset.testDataset(classifier, testData);
+
+		return new ResultSet(results, numTests);
 	}
 }

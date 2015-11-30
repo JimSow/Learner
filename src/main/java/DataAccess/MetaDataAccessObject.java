@@ -15,6 +15,10 @@ public class MetaDataAccessObject implements IDataAccessObject {
 		return null;
 	}
 
+	public Dataset getDataset(int[] ids) {
+		return null;
+	}
+
 	public Dataset getDataset() {
 		return null;
 	}

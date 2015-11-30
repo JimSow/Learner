@@ -3,7 +3,9 @@ package Tests.LearnerTests;
 import Learner.*;
 import Learner.HypothesisSpaceSearch.StreamLearning.AStreamLearner;
 import Learner.HypothesisSpaceSearch.StreamLearning.QueryByCommitee;
-import Old.Learner.UncertaintySampler;
+import Learner.PoolLearning.UncertaintySampling.Entropy;
+import Learner.PoolLearning.UncertaintySampling.LeastConfident;
+import Learner.PoolLearning.UncertaintySampling.Margin;
 import Oracle.IOracle;
 import Oracle.SimpleOracle;
 import be.abeel.util.Pair;
@@ -27,17 +29,33 @@ public class LearnerTest {
 	public static void main(String[] argc) {
 
 		try {
-			String dataFile = "data/iris.arff";
-			int classLoc = 4;
-			int numItter = 1000;
+//			String dataFile = "data/iris.arff"    ; int classLoc = 4;  // 150     instances
+//			String dataFile = "data/diabetes.arff"; int classLoc = 8;  // 768     instances
+//			String dataFile = "data/adult.arff"   ; int classLoc = 14; // 30,000+ instances
+//			String dataFile = "data/cpu.arff"     ; int classLoc = 6;  // 208     instances
+//			String dataFile = "data/AP.arff"      ; int classLoc = 271;// 234     instances
+//			String dataFile = "data/mfeat.arff"   ; int classLoc = 47; // 2000    instances
+//			String dataFile = "data/waveform.arff"; int classLoc = 40; // 5000    instances
+			String dataFile = "data/mnist.arff"   ; int classLoc = 784;// 70,000  instances
 
-			StopCondition st1 = new StopCondition(150);
-			StopCondition st2 = new StopCondition(3, 100, .94);
+			int numItter = 10;
+
+//			StopCondition st1 = new StopCondition(150);
+			StopCondition st2 = new StopCondition(50, 1000, .85);
 
 //			runBoth   (dataFile, classLoc, numItter);
-//			runPassive(dataFile, classLoc, numItter, st2);
-//			runActive (dataFile, classLoc, numItter, st2);
-			runStream (dataFile, classLoc, numItter, st2);
+
+			double startTime = System.nanoTime();
+			runPassive(dataFile, classLoc, numItter, st2);
+			double endTime = System.nanoTime();
+			System.out.println("Passive Durration: " + (endTime - startTime) / 1000000000 + " Seconds");
+
+			startTime = System.nanoTime();
+			runActive (dataFile, classLoc, numItter, st2);
+			endTime = System.nanoTime();
+			System.out.println("Active Durration:  " + (endTime - startTime) / 1000000000 + " Seconds");
+
+//			runStream (dataFile, classLoc, numItter, st2);
 
 
 		} catch (FileNotFoundException e) {
@@ -117,7 +135,7 @@ public class LearnerTest {
 
 			IOracle oracle = new SimpleOracle(data);
 
-			ILearner l1 = new UncertaintySampler(oracle, knn, data, testData, st, 10);
+			ILearner l1 = new LeastConfident(oracle, knn, data, testData, st, 10);
 
 			l1.run();
 			ResultSet rs1 = l1.getResults();
@@ -138,7 +156,7 @@ public class LearnerTest {
 
 		System.out.println("Number of Learners Trained: " + numItter );
 		System.out.println("Active Results");
-		System.out.println("Average Accuracy          : " + averageAccuracyActive + "%");
+		System.out.println("Average Accuracy          : " + averageAccuracyActive * 100 + "%");
 		System.out.println("Average Number of Tests   : " + averageNumTestsActive      );
 	}
 
@@ -187,7 +205,7 @@ public class LearnerTest {
 
 		System.out.println("Number of Learners Trained: " + numItter );
 		System.out.println("Passive Results");
-		System.out.println("Average Accuracy          : " + averageAccuracyPassive + "%");
+		System.out.println("Average Accuracy          : " + averageAccuracyPassive * 100 + "%");
 		System.out.println("Average Number of Tests   : " + averageNumTestsPassive      );
 
 	}
