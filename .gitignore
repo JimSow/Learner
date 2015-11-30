@@ -12,3 +12,5 @@ pom.xml
 *.xml
 
 lib/weka.jar
+
+json.txt
