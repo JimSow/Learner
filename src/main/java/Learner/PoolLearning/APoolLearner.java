@@ -83,24 +83,26 @@ public abstract class APoolLearner implements ILearner {
 	private void initialize() {
 		Random rand = new Random();
 		for(;initialTestsToRun > 0; initialTestsToRun--) {
-//			Instance next = unlabeledData.remove(rand.nextInt(unlabeledData.size()));
-//			Object label = oracle.getLabel(next);
-//			next.setClassValue(label);
-//			labeledData.add(next);
-			getNext();
+
+			//Use a random number generator to get the next instance
+			Instance next = unlabeledData.remove(rand.nextInt(unlabeledData.size()));
+			Object label = oracle.getLabel(next);
+			next.setClassValue(label);
+			labeledData.add(next);
+//			getNext();
+			++numTests;
 		}
+
+		System.out.print("");
 
 		classifier.buildClassifier(labeledData);
 	}
 
 	protected void getNext() {
-		int nextIndex = getNextInstanceIndex();
 
-		Instance next = unlabeledData.remove(nextIndex);
+		Instance next = unlabeledData.remove(getNextInstanceIndex());
 
-		Object label = oracle.getLabel(nextIndex);
-
-		next.setClassValue(label);
+		next.setClassValue(oracle.getLabel(next));
 
 		labeledData.add(next);
 
