@@ -1,6 +1,5 @@
 package Learner;
 
-import Old.Learner.Learner;
 import net.sf.javaml.classification.evaluation.PerformanceMeasure;
 
 import java.util.Map;

@@ -5,7 +5,6 @@ import net.sf.javaml.core.Instance;
 import net.sf.javaml.tools.data.ARFFHandler;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 

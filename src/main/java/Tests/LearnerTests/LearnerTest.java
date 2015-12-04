@@ -1,12 +1,12 @@
 package Tests.LearnerTests;
 
-import Learner.*;
+import DataAccess.Database.MySQLDataAccessObject;
 import Learner.HypothesisSpaceSearch.StreamLearning.AStreamLearner;
 import Learner.HypothesisSpaceSearch.StreamLearning.QueryByCommitee;
-import Learner.PoolLearning.UncertaintySampling.Entropy;
+import Learner.*;
 import Learner.PoolLearning.UncertaintySampling.LeastConfident;
-import Learner.PoolLearning.UncertaintySampling.Margin;
 import Oracle.IOracle;
+import Oracle.MySQLMetaDataOracle;
 import Oracle.SimpleOracle;
 import be.abeel.util.Pair;
 import net.sf.javaml.classification.Classifier;

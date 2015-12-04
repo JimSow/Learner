@@ -1,22 +1,16 @@
 import DataAccess.Database.MySQLDataAccessObject;
+import Tests.LearnerTests.MySQLTest;
+import be.abeel.util.Pair;
 import net.sf.javaml.classification.Classifier;
 import net.sf.javaml.classification.KNearestNeighbors;
-import net.sf.javaml.classification.NearestMeanClassifier;
-import net.sf.javaml.classification.bayes.NaiveBayesClassifier;
 import net.sf.javaml.classification.evaluation.EvaluateDataset;
 import net.sf.javaml.classification.evaluation.PerformanceMeasure;
 import net.sf.javaml.core.Dataset;
-import net.sf.javaml.core.Instance;
 import net.sf.javaml.filter.normalize.NormalizeMidrange;
 import net.sf.javaml.sampling.Sampling;
-import net.sf.javaml.tools.data.ARFFHandler;
+import net.sf.javaml.tools.weka.WekaClassifier;
+import weka.classifiers.bayes.*;
 
-import be.abeel.util.Pair;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class Main {

@@ -1,7 +1,6 @@
 package UserInterface;
 
 import asg.cliche.*;
-import com.sun.javaws.exceptions.ExitException;
 
 import java.io.IOException;
 

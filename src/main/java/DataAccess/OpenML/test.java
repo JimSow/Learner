@@ -8,7 +8,6 @@ import net.sf.javaml.classification.KNearestNeighbors;
 import net.sf.javaml.classification.evaluation.EvaluateDataset;
 import net.sf.javaml.classification.evaluation.PerformanceMeasure;
 import net.sf.javaml.core.Dataset;
-import net.sf.javaml.core.DefaultDataset;
 import net.sf.javaml.filter.normalize.NormalizeMidrange;
 import net.sf.javaml.sampling.Sampling;
 import net.sf.javaml.tools.data.ARFFHandler;
@@ -19,7 +18,6 @@ import org.openml.apiconnector.xml.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Iterator;
 import java.util.Map;
 
 /**

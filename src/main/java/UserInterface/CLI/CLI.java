@@ -1,12 +1,9 @@
 package UserInterface.CLI;
 
 import UserInterface.UserInterface;
-import asg.cliche.Command;
-import asg.cliche.Shell;
 import asg.cliche.ShellFactory;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 /**
  * Created by jared on 11/5/15.

@@ -1,12 +1,8 @@
 package DataAccess.OpenML;
 
 import DataAccess.Database.MySQLDataAccessObject;
+import Tests.LearnerTests.MySQLTest;
 import net.sf.javaml.core.Dataset;
-import net.sf.javaml.core.DefaultDataset;
-import net.sf.javaml.core.Instance;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by jared on 11/19/15.

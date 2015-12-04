@@ -2,7 +2,8 @@ package DataAccess.Database;
 
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.core.SparseInstance;
-import org.mongodb.morphia.annotations.*;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
 /**
  * Created by jared on 11/19/15.

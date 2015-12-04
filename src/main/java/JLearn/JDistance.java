@@ -1,8 +1,6 @@
 package JLearn;
 
 import net.sf.javaml.core.Instance;
-import net.sf.javaml.distance.DistanceMeasure;
-import net.sf.javaml.distance.EuclideanDistance;
 import net.sf.javaml.distance.AbstractDistance;
 
 /**

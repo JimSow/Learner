@@ -10,5 +10,4 @@ public interface IDataAccessObject {
 	Instance getInstance(int id);
 	Object   getLabel   (int id);
 	Dataset getDataset  (int[] ids);
-//	int     getCount  ();
 }

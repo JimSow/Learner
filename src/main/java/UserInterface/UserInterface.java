@@ -3,17 +3,9 @@ package UserInterface;
 import Learner.ILearner;
 import Learner.StopCondition;
 import Oracle.IOracle;
-import be.abeel.util.Pair;
 import net.sf.javaml.classification.Classifier;
 import net.sf.javaml.core.Dataset;
 import net.sf.javaml.filter.normalize.NormalizeMidrange;
-import net.sf.javaml.sampling.Sampling;
-import org.reflections.Reflections;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.*;
 
 /**
  * Created by jared on 11/5/15.
