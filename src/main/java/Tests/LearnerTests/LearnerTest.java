@@ -41,7 +41,7 @@ public class LearnerTest {
 			int numItter = 10;
 
 //			StopCondition st1 = new StopCondition(150);
-			StopCondition st2 = new StopCondition(50, 1000, .85);
+			StopCondition st2 = new StopCondition(10, 1000, .85);
 
 //			runBoth   (dataFile, classLoc, numItter);
 
@@ -140,7 +140,9 @@ public class LearnerTest {
 			Classifier knn = new KNearestNeighbors(5);
 //			knn = new KNN(5, new EuclideanDistance());
 
-			IOracle oracle = new SimpleOracle(data);
+//			IOracle oracle = new SimpleOracle(data);
+			IOracle oracle = new MySQLMetaDataOracle(ids, dao);
+
 
 			ILearner l1 = new LeastConfident(oracle, knn, data, testData, st, 10);
 
@@ -195,7 +197,8 @@ public class LearnerTest {
 
 			Classifier knn = new KNearestNeighbors(5);
 
-			IOracle oracle = new SimpleOracle(data);
+//			IOracle oracle = new SimpleOracle(data);
+			IOracle oracle = new MySQLMetaDataOracle(ids, dao);
 
 			ILearner l2 = new PassiveLearner(oracle, knn, data, testData, st, 10);
 

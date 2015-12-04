@@ -84,47 +84,4 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
-
-	public static int[] createIds(int size, int start, int offset) {
-		if(size < 1)
-			size = 1;
-		if(size > 500)
-			size = 500;
-		if(start < 1 || start > 500)
-			start = 1;
-		if(offset < 1 || offset * size > 500)
-			offset = 1;
-
-		MySQLDataAccessObject dao = new MySQLDataAccessObject(createAlgorithms());
-
-		int[] ids = new int[size];
-
-		for(int i = 0; i < size; ++i) {
-			ids[i] = start;
-
-			String label = (String) dao.getLabel(start);
-			if(label == null || label.isEmpty()) {
-				i--;
-			}
-
-			start += offset;
-		}
-
-		return ids;
-	}
-
-	public static List<String> createAlgorithms() {
-		List<String> algorithms = new ArrayList<String>();
-
-		algorithms.add("weka.IBk(%)");
-		algorithms.add("weka.J48(%)");
-		algorithms.add("weka.RandomTree(%)");
-		algorithms.add("weka.SimpleLogistic(%)");
-		algorithms.add("weka.DecisionStump(%)");
-		algorithms.add("weka.ZeroR(%)");
-		algorithms.add("weka.NaiveBayes(%)");
-		algorithms.add("weka.KStar(%)");
-
-		return algorithms;
-	}
 }
