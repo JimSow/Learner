@@ -73,6 +73,8 @@ public class LearnerTest {
 		while(pNumItter > 0) {
 			Dataset data = ARFFHandler.loadARFF(new File(fileLocation), classLoc);
 
+			MySQLDataAccessObject dao  = new MySQLDataAccessObject(MySQLTest.createAlgorithms());
+
 			NormalizeMidrange nmr = new NormalizeMidrange(0, 2);
 			nmr.build(data);
 			nmr.filter(data);
@@ -117,7 +119,12 @@ public class LearnerTest {
 		double numItter = pNumItter;
 
 		while(pNumItter > 0) {
-			Dataset data = ARFFHandler.loadARFF(new File(fileLocation), classLoc);
+			MySQLDataAccessObject dao = new MySQLDataAccessObject(MySQLTest.createAlgorithms());
+
+//			Dataset data = ARFFHandler.loadARFF(new File(fileLocation), classLoc);
+			int ids[] = MySQLTest.createIds(500, 1, 1);
+
+			Dataset data   = dao.getLabeledDataset(ids);
 
 			NormalizeMidrange nmr = new NormalizeMidrange(0, 2);
 			nmr.build(data);
@@ -168,7 +175,12 @@ public class LearnerTest {
 		double numItter = pNumItter;
 
 		while(pNumItter > 0) {
-			Dataset data = ARFFHandler.loadARFF(new File(fileLocation), classLoc);
+			MySQLDataAccessObject dao = new MySQLDataAccessObject(MySQLTest.createAlgorithms());
+
+//			Dataset data = ARFFHandler.loadARFF(new File(fileLocation), classLoc);
+			int ids[] = MySQLTest.createIds(500, 1, 1);
+
+			Dataset data   = dao.getLabeledDataset(ids);
 
 			NormalizeMidrange nmr = new NormalizeMidrange(0, 2);
 			nmr.build(data);

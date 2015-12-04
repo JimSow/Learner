@@ -10,7 +10,7 @@ import net.sf.javaml.core.Dataset;
 public class MysqlTest {
 
 	public static void main(String[] args) {
-		MySQLDataAccessObject dao = new MySQLDataAccessObject(createAlgorithms());
+		MySQLDataAccessObject dao = new MySQLDataAccessObject(MySQLTest.createAlgorithms());
 
 		int count = 0;
 
@@ -56,18 +56,4 @@ public class MysqlTest {
 
 	}
 
-	public static List<String> createAlgorithms() {
-		List<String> algorithms = new ArrayList<String>();
-
-		algorithms.add("weka.IBk(%)");
-		algorithms.add("weka.J48(%)");
-		algorithms.add("weka.RandomTree(%)");
-		algorithms.add("weka.SimpleLogistic(%)");
-		algorithms.add("weka.DecisionStump(%)");
-		algorithms.add("weka.ZeroR(%)");
-		algorithms.add("weka.NaiveBayes(%)");
-		algorithms.add("weka.KStar(%)");
-
-		return algorithms;
-	}
 }

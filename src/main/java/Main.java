@@ -20,9 +20,9 @@ public class Main {
 			Sampling s = Sampling.SubSampling;
 //			Dataset data = ARFFHandler.loadARFF(new File("data/Iris.arff"), 4);
 
-			MySQLDataAccessObject dao = new MySQLDataAccessObject(createAlgorithms());
+			MySQLDataAccessObject dao = new MySQLDataAccessObject(MySQLTest.createAlgorithms());
 
-			Dataset data = dao.getLabeledDataset(createIds(500, 1, 1));
+			Dataset data = dao.getLabeledDataset(MySQLTest.createIds(500, 1, 1));
 
 
 			NormalizeMidrange nmr = new NormalizeMidrange(0, 2);
