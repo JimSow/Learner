@@ -36,7 +36,6 @@ public class MySQLDataAccessObject implements IDataAccessObject {
 	public void setAlgorithms(List<String> pAlgorithms) { algorithms = pAlgorithms; }
 
 	public Instance getInstance(int id) {
-		System.out.println("Getting instance with id: " + id);
 
 		SparseInstance instance = new SparseInstance();
 
@@ -110,7 +109,6 @@ public class MySQLDataAccessObject implements IDataAccessObject {
 		return labels;
 	}
 
-	//TODO Implement getLabel Logic
 	public Object getLabel(int id) {
 
 		String best = "";

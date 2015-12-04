@@ -8,20 +8,20 @@ import java.util.HashMap;
 /**
  * Created by jared on 10/24/15.
  */
-public class SimpleOracle extends IOracle {
+public class SimpleOracle implements IOracle {
 
-	private Classifier c;
+	HashMap<Instance, Object> instances;
 
-	private DistanceMeasure dm;
 
 	public SimpleOracle(Dataset pData) {
-		super(pData);
+		instances = new HashMap<Instance, Object>();
+
+		for (Instance instance : pData) {
+			instances.put(instance, instance.classValue());
+		}
 	}
 
-	@Override
-	public Object getLabel(int index) {
-
-		if(data.size() <= 0){ return null; }
-		return data.classValue(index);
+	public Object getLabel(Instance instance) {
+		return instances.get(instance);
 	}
 }
