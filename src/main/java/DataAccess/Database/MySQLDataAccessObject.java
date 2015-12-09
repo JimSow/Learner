@@ -12,6 +12,7 @@ import java.util.List;
  * Created by jared on 11/19/15.
  */
 public class MySQLDataAccessObject implements IDataAccessObject {
+
 	final String url = "jdbc:mysql://localhost:8889/";
 	final String dbName = "openML";
 	final String driver = "com.mysql.jdbc.Driver";
@@ -54,7 +55,6 @@ public class MySQLDataAccessObject implements IDataAccessObject {
 							" and q.quality='" + quality + "'";
 
 					res = st.executeQuery(query);
-
 					if(res.next()) {
 						instance.put(i, res.getDouble("value"));
 						if(res.wasNull())
@@ -67,12 +67,8 @@ public class MySQLDataAccessObject implements IDataAccessObject {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-
 				++i;
 			}
-
-
-
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -214,7 +210,8 @@ public class MySQLDataAccessObject implements IDataAccessObject {
 		Statement st = null;
 		try {
 			st = conn.createStatement();
-			ResultSet res = st.executeQuery("select * from quality");
+			ResultSet res = st.executeQuery("select * from quality " +
+													"where type = 'DataQuality'");
 
 			while (res.next()) {
 				qualities.add(res.getString("name"));
